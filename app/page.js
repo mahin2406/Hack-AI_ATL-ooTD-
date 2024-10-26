@@ -27,12 +27,22 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>EasyLearning</title>
+        <title>ooTD</title>
         <meta name="description" content="Create flashcards from your text" />
       </Head>
 
       <AppBar position="fixed" sx={{ backgroundColor: "#1e1e2f", borderBottom: "3px solid #9c27b0" }}>
         <Toolbar>
+          {/* Logo Section */}
+          <img
+            src="/images/Logo.png"
+            alt="ooTD Logo"
+            style={{
+              height: 55,
+              marginRight: '1rem',
+              objectFit: 'contain',
+            }}
+          />
           <Typography
             variant="h5"
             sx={{
