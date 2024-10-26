@@ -33,6 +33,15 @@ export default function Home() {
           withCollapseButton: true,
           withCloseButton: true,
         },
+        onExpand: (conversationHandler) => {
+          const checkMessages = (messages) => {
+            if (messages.length === 0) {
+              conversationHandler.sendWelcomeIntent();
+            }
+            conversationHandler.unsubscribe(checkMessages);
+          };
+          conversationHandler.subscribe(checkMessages);
+        },
         theme: {
           primaryColor: "#8925da",
           chatWindowMaxHeight: 640,
@@ -58,7 +67,6 @@ export default function Home() {
 
       <AppBar position="fixed" sx={{ backgroundColor: "#1e1e2f", borderBottom: "3px solid #9c27b0" }}>
         <Toolbar>
-          {/* Logo Section */}
           <img
             src="/images/Logo.png"
             alt="ooTD Logo"
@@ -100,7 +108,6 @@ export default function Home() {
         </Toolbar>
       </AppBar>
 
-      {/* Main content section */}
       <Box
         sx={{
           display: 'flex',
@@ -148,7 +155,6 @@ export default function Home() {
             </Box>
           </Zoom>
 
-          {/* Features section */}
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6} md={4}>
               <Slide direction="up" in timeout={700}>
@@ -222,7 +228,7 @@ export default function Home() {
                     Smart Fashion Advisor
                   </Typography>
                   <Typography>
-                    AI-powered advisor optimized for dressing great everyday.
+                    AI-powered advisor optimized for dressing great every day.
                   </Typography>
                 </Paper>
               </Slide>
@@ -239,9 +245,9 @@ export default function Home() {
           bottom: 80, // Adjust this value to move it higher
           right: 20, 
           zIndex: 1000,
-          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)', // Adds shadow for a floating effect
-          borderRadius: '8px', // Optional: makes the edges rounded
-          backgroundColor: 'white', // Optional: adds a background color
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)', // Shadow for floating effect
+          borderRadius: '8px', // Makes the edges rounded
+          backgroundColor: 'white', // Background color
         }} 
       />
     </>
