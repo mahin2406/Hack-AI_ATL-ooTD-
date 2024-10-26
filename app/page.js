@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useAuth, useClerk, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Head from "next/head";
+import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { Container, Button, Toolbar, Typography, AppBar, Box, Grid, Paper, Slide, Zoom } from "@mui/material";
 import "@fontsource/poppins"; // Importing the 'Poppins' font
@@ -14,6 +15,30 @@ export default function Home() {
 
   useEffect(() => {
     setIsClient(true);
+    // Setup chat widget
+    const widgetScript = document.createElement("script");
+    widgetScript.src = "https://unpkg.com/@nlxai/chat-widget/lib/index.umd.js";
+    widgetScript.defer = true;
+    document.body.appendChild(widgetScript);
+
+    widgetScript.onload = () => {
+      const widget = nlxai.chatWidget.create({
+        config: {
+          botUrl: "https://bots.dev.studio.nlx.ai/c/7GErDJjuzsOoqHq8x6mI1/p4FbTuX49biyg1xVgMESA",
+          headers: { "nlx-api-key": "MNlhiZVq8x0-tVDXfmCIv=PnMEfcMD-8" },
+          languageCode: "en-US",
+        },
+        titleBar: {
+          title: "Customer Support",
+          withCollapseButton: true,
+          withCloseButton: true,
+        },
+        theme: {
+          primaryColor: "#8925da",
+          chatWindowMaxHeight: 640,
+        },
+      });
+    };
   }, []);
 
   const handleGetStarted = () => {
@@ -89,38 +114,34 @@ export default function Home() {
       >
         <Container maxWidth="lg" sx={{ flexGrow: 1 }}>
           <Zoom in timeout={1000}>
-            <Box sx={{ textAlign: "center", my: { xs: 4, sm: 6, md: 9 } }}>
+            <Box
+              sx={{
+                textAlign: "center",
+                my: { xs: 4, sm: 6, md: 9 },
+              }}
+            >
               <Typography
                 variant="h2"
                 sx={{
-                  fontWeight: '700',
+                  fontWeight: 700,
                   mb: 2,
                   color: "#9c27b0",
                   fontFamily: "'Poppins', sans-serif",
-                  letterSpacing: '0.1rem',
-                  fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }
                 }}
               >
                 Welcome to ooTD
               </Typography>
-              <Typography variant="h6" sx={{ mb: 4, fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' } }}>
+              <Typography variant="h6" sx={{ mb: 4 }}>
                 Get Dressed Easily
               </Typography>
               <Button
                 variant="contained"
+                onClick={handleGetStarted}
                 sx={{
                   mt: 2,
-                  py: 1.5,
-                  px: 3,
-                  backgroundColor: '#9c27b0',
-                  color: '#fff',
-                  fontWeight: '600',
-                  letterSpacing: '0.05rem',
-                  '&:hover': {
-                    backgroundColor: '#7b1fa2',
-                  },
+                  backgroundColor: "#9c27b0",
+                  "&:hover": { backgroundColor: "#7b1fa2" },
                 }}
-                onClick={handleGetStarted}
               >
                 Get Started
               </Button>
@@ -209,6 +230,20 @@ export default function Home() {
           </Grid>
         </Container>
       </Box>
+
+      {/* Chat Widget */}
+      <div 
+        id="chat-widget-container" 
+        style={{ 
+          position: 'fixed', 
+          bottom: 80, // Adjust this value to move it higher
+          right: 20, 
+          zIndex: 1000,
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)', // Adds shadow for a floating effect
+          borderRadius: '8px', // Optional: makes the edges rounded
+          backgroundColor: 'white', // Optional: adds a background color
+        }} 
+      />
     </>
   );
 }
