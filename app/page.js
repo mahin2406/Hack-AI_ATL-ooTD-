@@ -139,7 +139,7 @@ export default function Home() {
                 Welcome to ooTD
               </Typography>
               <Typography variant="h6" sx={{ mb: 4 }}>
-                Get Dressed Easily
+                Step Into Style with the Hottest Trends of the Day!
               </Typography>
               <Button
                 variant="contained"
@@ -173,10 +173,10 @@ export default function Home() {
                   }}
                 >
                   <Typography variant="h6" sx={{ mb: 2 }}>
-                    Easy Text and Image Input
+                  Effortless outfits, everyday!!
                   </Typography>
                   <Typography>
-                    Enter text and images; we&apos;ll generate your suitable outfit effortlessly.
+                    Transform your Wardrobe with curated looks that matches style of daily trend.
                   </Typography>
                 </Paper>
               </Slide>
@@ -199,10 +199,10 @@ export default function Home() {
                   }}
                 >
                   <Typography variant="h6" sx={{ mb: 2 }}>
-                    Accessible Anywhere
+                    24x7 Customer Support!!
                   </Typography>
                   <Typography>
-                    Access our recommendations on any device, anywhere.
+                    AI-powered chat assistance is here to solve your problems 24/7.
                   </Typography>
                 </Paper>
               </Slide>
@@ -225,10 +225,10 @@ export default function Home() {
                   }}
                 >
                   <Typography variant="h6" sx={{ mb: 2 }}>
-                    Smart Fashion Advisor
+                  Accessible Anywhere
                   </Typography>
                   <Typography>
-                    AI-powered advisor optimized for dressing great every day.
+                  Access our recommendations on any device, anywhere.
                   </Typography>
                 </Paper>
               </Slide>
