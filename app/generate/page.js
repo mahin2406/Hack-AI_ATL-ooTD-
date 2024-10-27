@@ -10,7 +10,7 @@ export default function GeneratePage() {
     // Fetch fashion trends from the server
     const fetchTrends = async () => {
       try {
-        const response = await fetch('/api/trends'); // Adjust the endpoint as needed
+        const response = await fetch('/api/generate-image'); // Adjust the endpoint as needed
         const data = await response.json();
         if (data.status === 'success') {
           setTrends(data.data);
@@ -42,7 +42,6 @@ export default function GeneratePage() {
           withCollapseButton: true,
           withCloseButton: true,
         },
-        // CUSTOM BEHAVIOR SNIPPET
         onExpand: (conversationHandler) => {
           const checkMessages = (messages) => {
             if (messages.length === 0) {
@@ -52,7 +51,6 @@ export default function GeneratePage() {
           };
           conversationHandler.subscribe(checkMessages);
         },
-        // CUSTOM BEHAVIOR SNIPPET END
         theme: {
           primaryColor: "#8925da",
           darkMessageColor: "#000000",
