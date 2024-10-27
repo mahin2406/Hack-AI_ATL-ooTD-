@@ -47,6 +47,15 @@ export default function GeneratePage() {
           withCollapseButton: true,
           withCloseButton: true,
         },
+        onExpand: (conversationHandler) => {
+            const checkMessages = (messages) => {
+              if (messages.length === 0) {
+                conversationHandler.sendWelcomeIntent();
+              }
+              conversationHandler.unsubscribe(checkMessages);
+            };
+            conversationHandler.subscribe(checkMessages);
+          },
         theme: {
           primaryColor: "#8925da",
           darkMessageColor: "#000000",
