@@ -1,6 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Box, Typography, Grid, CircularProgress, Paper } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid,
+  CircularProgress,
+  Paper,
+  Button,
+} from "@mui/material";
 
 export default function GeneratePage() {
   const [trends, setTrends] = useState([]);
@@ -9,7 +16,7 @@ export default function GeneratePage() {
   useEffect(() => {
     const fetchTrends = async () => {
       try {
-        const response = await fetch("/api/generate-image"); // Adjust the endpoint
+        const response = await fetch("/api/generate-image");
         const data = await response.json();
         if (data.status === "success") {
           setTrends(data.data);
@@ -29,7 +36,7 @@ export default function GeneratePage() {
     document.body.appendChild(widgetScript);
 
     widgetScript.onload = () => {
-      const widget = nlxai.chatWidget.create({
+      nlxai.chatWidget.create({
         config: {
           botUrl: "https://bots.dev.studio.nlx.ai/c/7GErDJjuzsOoqHq8x6mI1/p4FbTuX49biyg1xVgMESA",
           headers: { "nlx-api-key": "MNlhiZVq8x0-tVDXfmCIv=PnMEfcMD-8" },
@@ -53,7 +60,6 @@ export default function GeneratePage() {
 
   return (
     <div style={{ backgroundColor: "#1a1a1a", minHeight: "100vh", padding: "20px" }}>
-      {/* Chat Widget */}
       <div
         id="chat-widget-container"
         style={{
@@ -67,15 +73,13 @@ export default function GeneratePage() {
         }}
       />
 
-      {/* Fashion Trends Section */}
-      <Box sx={{ marginTop: 8, padding: 3 }}>
-        <Typography 
-          variant="h4" 
-          gutterBottom 
-          align="center" 
-          sx={{ color: "#8925da", fontWeight: "bold" }}
+      <Box sx={{ marginTop: 8, padding: 3, textAlign: "center" }}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{ color: "#8925da", fontWeight: "bold", mb: 4 }}
         >
-          Latest Fashion Trends
+          Fashion Trends of the DAY!!
         </Typography>
 
         {loading ? (
@@ -93,14 +97,14 @@ export default function GeneratePage() {
                     backgroundColor: "#292929",
                     color: "#f9f9f9",
                     borderRadius: "10px",
-                    transition: "transform 0.3s ease-in-out",
+                    transition: "transform 0.3s ease-in-out, box-shadow 0.3s",
                     "&:hover": {
                       transform: "scale(1.05)",
                       boxShadow: "0px 8px 30px rgba(137, 37, 218, 0.8)",
                     },
                   }}
                 >
-                  <Typography variant="h5" sx={{ color: "#8925da" }}>
+                  <Typography variant="h5" sx={{ color: "#8925da", mb: 1 }}>
                     {trend.name}
                   </Typography>
                   <Typography variant="body2" gutterBottom sx={{ color: "#b0b0b0" }}>
@@ -109,26 +113,64 @@ export default function GeneratePage() {
                   <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
                     ${trend.price}
                   </Typography>
-                  <Grid container spacing={1}>
-                    {trend.images.map((image) => (
-                      <Grid item xs={12} key={image.url}>
-                        <img
-                          src={image.url}
-                          alt={trend.name}
-                          style={{
-                            width: "100%",
-                            borderRadius: "8px",
-                            border: "1px solid #444",
-                          }}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#8925da",
+                      color: "#fff",
+                      "&:hover": {
+                        backgroundColor: "#7322b1",
+                      },
+                      borderRadius: "20px",
+                      padding: "8px 16px",
+                    }}
+                  >
+                    Buy Now
+                  </Button>
                 </Paper>
               </Grid>
             ))}
           </Grid>
         )}
+
+        {/* Static Image Section */}
+        <Grid container spacing={3} sx={{ mt: 4 }}>
+          {[
+            "images/img1.jpg",
+            "images/image2.jpg",
+            "images/image3.jpg",
+            "images/image4.jpg",
+            "images/image5.jpg",
+            "images/image6.jpg",
+            "images/image7.jpg",
+            "images/image8.jpg",
+          ].map((imageSrc, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Paper
+                elevation={3}
+                sx={{
+                  overflow: "hidden",
+                  borderRadius: "8px",
+                  transition: "transform 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.03)",
+                  },
+                }}
+              >
+                <img
+                  src={`/${imageSrc}`} // Prefix with '/' to point to the public directory
+                  alt={`Fashion ${index + 1}`}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "block",
+                    borderRadius: "8px 8px 0 0",
+                  }}
+                />
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
     </div>
   );
