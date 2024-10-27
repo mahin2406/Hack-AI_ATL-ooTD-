@@ -1,50 +1,37 @@
-// /app/api/generate-image/route.js
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from 'openai';
 
-const predefinedPrompt = "New fashion clothes images"; // Change as needed
+const predefinedPrompt = "New fashion clothes images";
 
-// Initialize OpenAI API
-const openai = new OpenAIApi(
-  new Configuration({
-    apiKey: process.env.OPENAI_API_KEY, // Ensure this key is correctly set in your .env file
-  })
-);
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req) {
   try {
-    // Call DALL·E 3 image generation
-    const response = await openai.createImage({
+    const response = await openai.images.generate({
       prompt: predefinedPrompt,
-      n: 1, // Number of images to generate
-      size: "512x512", // Image size: 256x256, 512x512, or 1024x1024
-      response_format: "url", // Response format: "url" or "b64_json"
+      n: 1,
+      size: "512x512",
     });
 
-    const imageUrl = response.data.data[0].url; // Extract image URL
+    const imageUrl = response.data[0].url;
 
-    // Send back the image URL in the response
-    return new Response(
-      JSON.stringify({ imageUrl }), 
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ imageUrl }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
-    console.error("Error generating image:", error.message);
-    return new Response(
-      JSON.stringify({ error: "Failed to generate image" }), 
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    console.error("Error generating image:", error);
+    return new Response(JSON.stringify({ error: "Failed to generate image" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
 
 export async function GET(req) {
   return new Response(
-    JSON.stringify({ error: "Method not allowed" }), 
+    JSON.stringify({ error: "Method not allowed" }),
     {
       status: 405,
       headers: { "Content-Type": "application/json" },
