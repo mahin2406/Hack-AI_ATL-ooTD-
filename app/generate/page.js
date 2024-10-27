@@ -12,23 +12,11 @@ import {
 export default function GeneratePage() {
   const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [generatedImage, setGeneratedImage] = useState(null);
 
+  // Automatically generate image on page load
   useEffect(() => {
-    const fetchTrends = async () => {
-      try {
-        const response = await fetch("/api/generate-image");
-        const data = await response.json();
-        if (data.status === "success") {
-          setTrends(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching trends:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTrends();
+    generateImage();
 
     const widgetScript = document.createElement("script");
     widgetScript.src = "https://unpkg.com/@nlxai/chat-widget/lib/index.umd.js";
@@ -48,14 +36,14 @@ export default function GeneratePage() {
           withCloseButton: true,
         },
         onExpand: (conversationHandler) => {
-            const checkMessages = (messages) => {
-              if (messages.length === 0) {
-                conversationHandler.sendWelcomeIntent();
-              }
-              conversationHandler.unsubscribe(checkMessages);
-            };
-            conversationHandler.subscribe(checkMessages);
-          },
+          const checkMessages = (messages) => {
+            if (messages.length === 0) {
+              conversationHandler.sendWelcomeIntent();
+            }
+            conversationHandler.unsubscribe(checkMessages);
+          };
+          conversationHandler.subscribe(checkMessages);
+        },
         theme: {
           primaryColor: "#8925da",
           darkMessageColor: "#000000",
@@ -66,6 +54,26 @@ export default function GeneratePage() {
       });
     };
   }, []);
+
+  const generateImage = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await response.json();
+      if (data.imageUrl) {
+        setGeneratedImage(data.imageUrl);
+      } else {
+        console.error("Image generation failed:", data.error);
+      }
+    } catch (error) {
+      console.error("Error generating image:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div style={{ backgroundColor: "#1a1a1a", minHeight: "100vh", padding: "20px" }}>
@@ -88,94 +96,74 @@ export default function GeneratePage() {
           gutterBottom
           sx={{ color: "#8925da", fontWeight: "bold", mb: 4 }}
         >
-          Fashion Trends of the DAY!!
+          Fashion Trends of the Day!
         </Typography>
 
         {loading ? (
           <Box display="flex" justifyContent="center" mt={5}>
             <CircularProgress color="inherit" />
           </Box>
-        ) : (
-          <Grid container spacing={4}>
-            {trends.map((trend) => (
-              <Grid item xs={12} sm={6} md={4} key={trend._id}>
-                <Paper
-                  elevation={6}
-                  sx={{
-                    padding: 3,
-                    backgroundColor: "#292929",
-                    color: "#f9f9f9",
-                    borderRadius: "10px",
-                    transition: "transform 0.3s ease-in-out, box-shadow 0.3s",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                      boxShadow: "0px 8px 30px rgba(137, 37, 218, 0.8)",
-                    },
-                  }}
-                >
-                  <Typography variant="h5" sx={{ color: "#8925da", mb: 1 }}>
-                    {trend.name}
-                  </Typography>
-                  <Typography variant="body2" gutterBottom sx={{ color: "#b0b0b0" }}>
-                    {trend.description}
-                  </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-                    ${trend.price}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#8925da",
-                      color: "#fff",
-                      "&:hover": {
-                        backgroundColor: "#7322b1",
-                      },
-                      borderRadius: "20px",
-                      padding: "8px 16px",
-                    }}
-                  >
-                    Buy Now
-                  </Button>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        )}
+        ) : generatedImage ? (
+          <Box mt={4}>
+            <img
+              src={generatedImage}
+              alt="Generated AI"
+              style={{ maxWidth: "100%", borderRadius: "12px" }}
+            />
+          </Box>
+        ) : null}
 
-        {/* Static Image Section */}
-        <Grid container spacing={3} sx={{ mt: 4 }}>
-          {[
-            "images/img1.jpg",
-            "images/image2.jpg",
-            "images/image3.jpg",
-            "images/image4.jpg",
-            "images/image5.jpg",
-            "images/image6.jpg",
-            "images/image7.jpg",
-            "images/image8.jpg",
-          ].map((imageSrc, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+        <Button
+          variant="contained"
+          onClick={generateImage}
+          sx={{
+            backgroundColor: "#8925da",
+            color: "#fff",
+            "&:hover": { backgroundColor: "#7322b1" },
+            borderRadius: "20px",
+            padding: "8px 16px",
+            marginTop: "20px",
+          }}
+        >
+          Regenerate Image
+        </Button>
+
+        <Grid container spacing={4} mt={2}>
+          {trends.map((trend) => (
+            <Grid item xs={12} sm={6} md={4} key={trend._id}>
               <Paper
-                elevation={3}
+                elevation={6}
                 sx={{
-                  overflow: "hidden",
-                  borderRadius: "8px",
-                  transition: "transform 0.3s ease",
+                  padding: 3,
+                  backgroundColor: "#292929",
+                  color: "#f9f9f9",
+                  borderRadius: "10px",
+                  transition: "transform 0.3s, box-shadow 0.3s",
                   "&:hover": {
-                    transform: "scale(1.03)",
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 8px 30px rgba(137, 37, 218, 0.8)",
                   },
                 }}
               >
-                <img
-                  src={`/${imageSrc}`} // Prefix with '/' to point to the public directory
-                  alt={`Fashion ${index + 1}`}
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    display: "block",
-                    borderRadius: "8px 8px 0 0",
+                <Typography variant="h5" sx={{ color: "#8925da", mb: 1 }}>
+                  {trend.name}
+                </Typography>
+                <Typography variant="body2" gutterBottom sx={{ color: "#b0b0b0" }}>
+                  {trend.description}
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+                  ${trend.price}
+                </Typography>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#8925da",
+                    "&:hover": { backgroundColor: "#7322b1" },
+                    borderRadius: "20px",
                   }}
-                />
+                >
+                  Buy Now
+                </Button>
               </Paper>
             </Grid>
           ))}

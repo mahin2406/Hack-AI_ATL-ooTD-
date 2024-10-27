@@ -1,44 +1,40 @@
-// route.js
-import { GoogleGenerativeAI } from "@google/generative-ai";
-// import { storage } from "../../firebase";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
+// /app/api/generate-image/route.js
+import { Configuration, OpenAIApi } from "openai";
 
-// Predefined prompt for image generation
-const predefinedPrompt = "A futuristic cityscape with flying cars and vibrant neon lights";
+const predefinedPrompt = "New fashion clothes images"; // Change as needed
+
+// Initialize OpenAI API
+const openai = new OpenAIApi(
+  new Configuration({
+    apiKey: process.env.OPENAI_API_KEY, // Ensure this key is correctly set in your .env file
+  })
+);
 
 export async function POST(req) {
   try {
-    const genAI = new GoogleGenerativeAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    });
-
-    // Generate the image
-    const response = await genAI.generateImage({
-      model: "gemini-pro",
+    // Call DALL·E 3 image generation
+    const response = await openai.createImage({
       prompt: predefinedPrompt,
+      n: 1, // Number of images to generate
+      size: "512x512", // Image size: 256x256, 512x512, or 1024x1024
+      response_format: "url", // Response format: "url" or "b64_json"
     });
 
-    const imageData = response.response.artifacts[0].base64;
+    const imageUrl = response.data.data[0].url; // Extract image URL
 
-    // Define a reference to where the image will be stored
-    const imageRef = ref(storage, `generated-images/${Date.now()}.png`);
-
-    // Upload the base64 image to Firebase Storage
-    await uploadString(imageRef, imageData, "base64");
-
-    // Get the public URL of the uploaded image
-    const downloadURL = await getDownloadURL(imageRef);
-
+    // Send back the image URL in the response
     return new Response(
-      JSON.stringify({ imageUrl: downloadURL }), {
+      JSON.stringify({ imageUrl }), 
+      {
         status: 200,
         headers: { "Content-Type": "application/json" },
       }
     );
   } catch (error) {
-    console.error("Error generating or uploading image:", error);
+    console.error("Error generating image:", error.message);
     return new Response(
-      JSON.stringify({ error: "Failed to generate or upload image" }), {
+      JSON.stringify({ error: "Failed to generate image" }), 
+      {
         status: 500,
         headers: { "Content-Type": "application/json" },
       }
@@ -48,7 +44,8 @@ export async function POST(req) {
 
 export async function GET(req) {
   return new Response(
-    JSON.stringify({ error: "Method not allowed" }), {
+    JSON.stringify({ error: "Method not allowed" }), 
+    {
       status: 405,
       headers: { "Content-Type": "application/json" },
     }
