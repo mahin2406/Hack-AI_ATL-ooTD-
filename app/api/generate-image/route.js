@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-const predefinedPrompt = "New fashion clothes images";
+const predefinedPrompt = "Generate a high-resolution image (512x512) featuring a diverse group of realistic models showcasing daily fashion trends. The scene should depict a mix of casual, business, and evening outfits in an urban environment, such as a bustling city street or a stylish café. Focus on capturing sharp and clear facial expressions and features of the models, ensuring that they represent a range of sizes, ethnicities, and gender identities. Emphasize vibrant colors and textures in the clothing, paying attention to accessories, layering, and current fashion trends. Use natural lighting to enhance the clarity of the image and highlight the intricate details of the outfits.";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
