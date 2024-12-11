@@ -1,6 +1,15 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI-Powered OOTD(Outfit of The Day) Fashion App
 
-## Getting Started
+Developed an AI-powered Outfit of the Day (OOTD) application during the AI-ATL Hackathon. The app leverages OpenAI's DALL·E 3 to generate personalized fashion trend images and outfit recommendations. I integrated the Nlx.ai conversational AI platform to provide automated customer support and styling assistance.
+
+The project showcased the potential of AI in transforming personal fashion experiences by offering intelligent, personalized styling recommendations.
+
+## Key Achievements
+- Generated fashion trend images using AI
+- Implemented personalized outfit recommendations
+- Integrated conversational AI for customer support
+
+## How to Run
 
 First, run the development server:
 
